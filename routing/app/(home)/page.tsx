@@ -1,9 +1,10 @@
-import Navigation from "../components/Navigation";
+export const metadata = {
+  title: "Home",
+};
 
 export default function Home() {
   return (
     <>
-      <Navigation />
       <h1>Hello NextJS</h1>
     </>
   );
