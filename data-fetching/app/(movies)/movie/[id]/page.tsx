@@ -1,25 +1,23 @@
-import { API_URL } from "../../../(home)/page";
+import { Suspense } from "react";
+import MovieInfo, { getMovie } from "../../../../components/movie-info";
+import MovieVideos from "../../../../components/movie-videos";
 
-export const metadata = {
-  title: "Movie Detail",
-};
-
-async function getMovie(id) {
-  const response = await fetch(`${API_URL}/${id}`);
-  const json = await response.json();
-  return json;
-}
-
-async function getVideos(id) {
-  const response = await fetch(`${API_URL}/${id}/videos`);
-  const json = await response.json();
-  return json;
+export async function generateMetadata({ params: { id } }) {
+  const movie = await getMovie(id);
+  return {
+    title: movie.title,
+  };
 }
 
 export default async function MovieDetail({ params: { id } }) {
-  const [movie, videos] = await Promise.all([getMovie(id), getVideos(id)]);
-
-  console.log(movie);
-  console.log(videos);
-  return <h1>{movie.title}</h1>;
+  return (
+    <div>
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <MovieInfo id={id} />
+      </Suspense>
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <MovieVideos id={id} />
+      </Suspense>
+    </div>
+  );
 }
